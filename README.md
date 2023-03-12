@@ -1,4 +1,4 @@
-# KSP-constellations
+# KSP Konstellations
 
 KSP Konstellations is a small and fast app that you can use to easily calculate data for your next satellites constellations anywhere in the Kerbol system
 
