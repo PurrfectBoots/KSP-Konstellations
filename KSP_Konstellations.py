@@ -1,8 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import math
 
+<<<<<<< HEAD
 # TODO fix 1 limit period not checked
 
+=======
+>>>>>>> 33577846faa508a1a9026d953a1647ce2ac34814
 system = {
     "kerbol": {
         "radius": 261600000,
@@ -137,7 +140,11 @@ class Ui_MainWindow(object):
         MainWindow.setDockNestingEnabled(False)
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         MainWindow.setWindowTitle("KSP Konstellations")
+<<<<<<< HEAD
         MainWindow.setWindowIcon((QtGui.QIcon('assets\logo.png')))
+=======
+        MainWindow.setWindowIcon((QtGui.QIcon('logo.png')))
+>>>>>>> 33577846faa508a1a9026d953a1647ce2ac34814
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.parameters = QtWidgets.QFrame(self.centralwidget)
@@ -323,7 +330,11 @@ class Ui_MainWindow(object):
         self.errDialog.adjustSize()
         self.errDialog.setFixedSize(self.errMsg.size() + QtCore.QSize(30, 30))
 
+<<<<<<< HEAD
         self.errDialog.setWindowIcon(QtGui.QIcon('assets\logo.png'))
+=======
+        self.errDialog.setWindowIcon(QtGui.QIcon('logo.png'))
+>>>>>>> 33577846faa508a1a9026d953a1647ce2ac34814
         self.errDialog.setModal(True)
         self.errDialog.exec_()
 
@@ -395,7 +406,11 @@ class Ui_MainWindow(object):
         self.resultsDialog.adjustSize()
         self.resultsDialog.setFixedSize(self.results.size() + QtCore.QSize(30, 30))
 
+<<<<<<< HEAD
         self.resultsDialog.setWindowIcon(QtGui.QIcon('assets\logo.png'))
+=======
+        self.resultsDialog.setWindowIcon(QtGui.QIcon('logo.png'))
+>>>>>>> 33577846faa508a1a9026d953a1647ce2ac34814
         self.resultsDialog.setModal(True)
         self.resultsDialog.exec_()
 
