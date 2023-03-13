@@ -6,119 +6,152 @@ system = {
         "radius": 261600000,
         "atmosphere": 600000,
         "soi": float('inf'),
-        "mass": 1.757e28
+        "mass": 1.757e28,
+        "parent": None
     },
     "moho": {
         "radius": 250000,
         "atmosphere": 0,
         "soi": 9646663,
         "mass": 2.526e21,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 6315765981,
+        "pe": 4210510628
     },
     "eve": {
         "radius": 700000,
         "atmosphere": 90000,
         "soi": 85109365,
         "mass": 1.224e23,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 9931011387,
+        "pe": 9734357701
     },
     "gilly": {
         "radius": 13000,
         "atmosphere": 0,
         "soi": 126123.27,
         "mass": 1.242e17,
-        "parent": "eve"
+        "parent": "eve",
+        "ap": 48825000,
+        "pe": 14175000
     },
     "kerbin": {
         "radius": 600000,
         "atmosphere": 70000,
         "soi": 	84159286,
         "mass": 5.292e22,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 13599840256,
+        "pe": 13599840256
     },
     "mun": {
         "radius": 200000,
         "atmosphere": 0,
         "soi": 2429559.1,
         "mass": 9.760e20,
-        "parent": "kerbin"
+        "parent": "kerbin",
+        "ap": 12000000,
+        "pe": 12000000
     },
     "minmus": {
         "radius": 60000,
         "atmosphere": 0,
         "soi": 	2247428.4,
         "mass": 2.646e19,
-        "parent": "kerbin"
+        "parent": "kerbin",
+        "ap": 47000000,
+        "pe": 47000000
     },
     "duna": {
         "radius": 320000,
         "atmosphere": 50000,
         "soi": 47921949,
         "mass": 4.515e21,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 	21783189163,
+        "pe": 19669121365
     },
     "ike": {
         "radius": 130000,
         "atmosphere": 0,
         "soi": 1049598.9,
         "mass": 2.782e20,
-        "parent": "duna"
+        "parent": "duna",
+        "ap": 	3296000,
+        "pe": 	3104000
     },
     "dres": {
         "radius": 138000,
         "atmosphere": 0,
         "soi": 32832840,
         "mass": 3.219e20,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 46761053692,
+        "pe": 	34917642714
     },
     "jool": {
         "radius": 6000000,
         "atmosphere": 200000,
         "soi": 	2455985200,
         "mass": 4.233e24,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 72212238387,
+        "pe": 	65334882253
     },
     "laythe": {
         "radius": 500000,
         "atmosphere": 50000,
         "soi": 3723645.8,
         "mass": 2.940e22,
-        "parent": "jool"
+        "parent": "jool",
+        "ap": 	27184000,
+        "pe": 	27184000
     },
     "vall": {
         "radius": 300000,
         "atmosphere": 0,
         "soi": 	2406401.4,
         "mass": 3.109e21,
-        "parent": "jool"
+        "parent": "jool",
+        "ap": 	43152000,
+        "pe": 	43152000
     },
     "tylo": {
         "radius": 600000,
         "atmosphere": 0,
         "soi": 	10856518,
         "mass": 4.233e22,
-        "parent": "jool"
+        "parent": "jool",
+        "ap": 	68500000,
+        "pe": 	68500000
     },
     "bop": {
         "radius": 65000,
         "atmosphere": 0,
         "soi": 	1221060.9,
         "mass": 3.726e19,
-        "parent": "jool"
+        "parent": "jool",
+        "ap": 158697500,
+        "pe": 98302500
     },
     "pol": {
         "radius": 44000,
         "atmosphere": 0,
         "soi": 1042138.9,
         "mass": 1.081e19,
-        "parent": "jool"
+        "parent": "jool",
+        "ap": 210624207,
+        "pe": 	149155794
     },
     "eeloo": {
         "radius": 210000,
         "atmosphere": 0,
         "soi": 119082940,
         "mass": 1.115e21,
-        "parent": "kerbol"
+        "parent": "kerbol",
+        "ap": 	113549713200,
+        "pe": 	66687926800
     }
 }
     
@@ -332,23 +365,26 @@ class Ui_MainWindow(object):
 
         main_orbit_alt = self.finalorbit_select.value() * 1000
         amount = self.amount_select.value()
+        radius = system[celestial_body]["radius"]
 
         G = 6.6743e-11
         result = f""
 
-        final_period = 2 * math.pi * math.sqrt(((main_orbit_alt + system[celestial_body]["radius"]) ** 3) / (G * system[celestial_body]["mass"]))
+        final_period = 2 * math.pi * math.sqrt(((main_orbit_alt + radius) ** 3) / (G * system[celestial_body]["mass"]))
         transfer_period = final_period * (1 - (1/amount))
-        final_orbit = (G * system[celestial_body]["mass"] * (final_period ** 2) / (4 * math.pi ** 2)) ** (1/3) - system[celestial_body]["radius"]
+        final_orbit = (G * system[celestial_body]["mass"] * (final_period ** 2) / (4 * math.pi ** 2)) ** (1/3) - radius
         semiMajorAxis = ((G * system[celestial_body]["mass"] * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
-        transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - system[celestial_body]["radius"]) - system[celestial_body]["radius"]
+        transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - radius) - radius
             
         # Checks
+
+        # Transfer orbit periapsis safety
         number = ""
         times = 1
-        while transfer_orbit_periapsis + system[celestial_body]["radius"] < system[celestial_body]["radius"] + system[celestial_body]["atmosphere"]:
+        while transfer_orbit_periapsis + radius < radius + system[celestial_body]["atmosphere"]:
             transfer_period = final_period * (1 - (1 / (amount * times)))
             semiMajorAxis = ((G * system[celestial_body]["mass"] * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
-            transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - system[celestial_body]["radius"]) - system[celestial_body]["radius"]
+            transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - radius) - radius
             times += 1
             number = "s"
             periodLimit = self.periodLimit_select.value()
@@ -356,16 +392,27 @@ class Ui_MainWindow(object):
         
         if times == 1: times = "" 
         else: times = str(times) + " "
-        
-        result += f"Final orbit: {round(final_orbit / 1000):,}km\n"
+
+        # Orbits encouters
+        for body in system:
+            if system[body]["parent"] == celestial_body:
+                soi_orbit = [system[body]["ap"] + system[body]["soi"], system[body]["pe"] + system[body]["soi"]]
+                if soi_orbit[1] < transfer_orbit_periapsis < soi_orbit[0] or soi_orbit[1] < final_orbit < soi_orbit[0]:
+                    body_orbit = [system[body]["ap"] + system[body]["radius"], system[body]["pe"] + system[body]["radius"]]
+                    if body_orbit[1] < transfer_orbit_periapsis < body_orbit[0] or body_orbit[1] < final_orbit < body_orbit[0]:
+                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S BODY</font><br>"
+                    else:
+                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S SOI</font><br>"
+
+        result += f"Final orbit: {round(final_orbit / 1000):,}km<br>"
 
         days, hours, minutes, seconds = self.convert_seconds_to_DHMS(transfer_period)
-        result += f"Transfer period: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(transfer_period):,} seconds)\n"
+        result += f"Transfer period: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(transfer_period):,} seconds)<br>"
 
         days, hours, minutes, seconds = self.convert_seconds_to_DHMS(final_period)
-        result += f"Final period: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(final_period):,} seconds)\n"
+        result += f"Final period: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(final_period):,} seconds)<br>"
 
-        result += f"Transfer orbit periapsis: {int(transfer_orbit_periapsis / 1000):,}km\n"
+        result += f"Transfer orbit periapsis: {int(transfer_orbit_periapsis / 1000):,}km<br>"
 
         result += f"Stage every {str(times)}period{number}"
 
