@@ -439,10 +439,8 @@ class Ui_MainWindow(object):
 
         # Estimate the right antennas between satellites
         for antenna in antennas:
-            print(list(antennas.keys())[-1] == antenna)
             if antennas[antenna] < average_distance:
                 if list(antennas.keys())[-1] == antenna:
-                    print("hello")
                     result += f"⚠️ <font color=\"orange\">WARNING: SATELLITES WON'T BE ABLE TO COMMUNICATE,<br>Add more satellites</font>"
                     break
                 else:
