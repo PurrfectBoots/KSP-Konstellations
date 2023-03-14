@@ -437,7 +437,7 @@ class Ui_MainWindow(object):
 
         result += f"Stage every {str(times)}period{number}<br>"
 
-        # Estimate the right antennas between sats
+        # Estimate the right antennas between satellites
         for antenna in antennas:
             if antennas[antenna] < average_distance:
                 continue
