@@ -155,6 +155,13 @@ system = {
     }
 }
     
+antennas = {
+    "HG-5 High Gain Antenna": 5000000,
+    "RA-2 Relay Antenna": 2000000000,
+    "RA-15 Relay Antenna": 15000000000,
+    "RA-100 Relay Antenna": 100000000000
+}
+
 class Ui_MainWindow(object):    
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -318,6 +325,7 @@ class Ui_MainWindow(object):
         self.finalorbit_select.setMinimum(int(low_limit))
         self.finalorbit_select.setValue(int(low_limit))
         
+    # Utilities
     def convert_seconds_to_DHMS(self, seconds):
         KSP_DAY_LENGTH = 6 * 60 * 60
         days = seconds // KSP_DAY_LENGTH
@@ -328,6 +336,14 @@ class Ui_MainWindow(object):
         seconds %= 60
         return int(days), int(hours), int(minutes), int(seconds)
     
+    def reduce_number(self, num):
+        suffixes = ['', 'k', 'M', 'G']
+        i = 0
+        while num >= 1000 and i < len(suffixes) - 1:
+            num /= 1000
+            i += 1
+        return f'{num:,}{suffixes[i]}'
+
     def err(self, reason):
         self.errDialog = QtWidgets.QDialog()
         self.errDialog.setWindowTitle("KSP Konstellations - ERROR")
@@ -358,7 +374,6 @@ class Ui_MainWindow(object):
 
         self.errDialog.setModal(True)
         self.errDialog.exec_()
-
     
     def doTheMaths(self):
         celestial_body = self.body_select.currentText().lower()
@@ -366,7 +381,6 @@ class Ui_MainWindow(object):
         main_orbit_alt = self.finalorbit_select.value() * 1000
         amount = self.amount_select.value()
         radius = system[celestial_body]["radius"]
-        print(radius)
 
         G = 6.6743e-11
         result = f""
@@ -409,7 +423,6 @@ class Ui_MainWindow(object):
         average_distance = 2 * (final_orbit + radius) * math.sin(math.pi / amount)
         min_alt_comNet = math.sqrt((final_orbit + radius) ** 2 - ((final_orbit + radius) * math.sin(math.pi / amount)) ** 2)
         if min_alt_comNet < radius:
-            print("fuck")
             result += f"⚠️ <font color=\"orange\">WARNING: SATELLITES COMMUNICATIONS MAY BE BLOCKED BY {celestial_body.upper()}'S BODY</font><br>"
 
         result += f"Final orbit: {round(final_orbit / 1000):,}km<br>"
@@ -422,7 +435,16 @@ class Ui_MainWindow(object):
 
         result += f"Transfer orbit periapsis: {int(transfer_orbit_periapsis / 1000):,}km<br>"
 
-        result += f"Stage every {str(times)}period{number}"
+        result += f"Stage every {str(times)}period{number}<br>"
+
+        # Estimate the right antennas between sats
+        for antenna in antennas:
+            if antennas[antenna] < average_distance:
+                continue
+            else:
+                antenna_rating = self.reduce_number(antennas[antenna])
+                result += f"Estimated required antenna: {antenna} ({antenna_rating})"
+                break
 
         self.resultsDialog = QtWidgets.QDialog()
         self.resultsDialog.setWindowTitle("KSP Konstellations - Calculations results")
