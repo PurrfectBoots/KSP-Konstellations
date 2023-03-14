@@ -415,9 +415,9 @@ class Ui_MainWindow(object):
                 if soi_orbit[1] < transfer_orbit_periapsis < soi_orbit[0] or soi_orbit[1] < final_orbit < soi_orbit[0]:
                     body_orbit = [system[body]["ap"] + system[body]["radius"], system[body]["pe"] + system[body]["radius"]]
                     if body_orbit[1] < transfer_orbit_periapsis < body_orbit[0] or body_orbit[1] < final_orbit < body_orbit[0]:
-                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S BODY</font><br>"
+                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S BODY,<br>Add more satellites or increase orbit</font><br>"
                     else:
-                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S SOI</font><br>"
+                        result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S SOI,<br>Add more satellites or increase orbit</font><br>"
         
         # Coms
         average_distance = 2 * (final_orbit + radius) * math.sin(math.pi / amount)
@@ -439,8 +439,14 @@ class Ui_MainWindow(object):
 
         # Estimate the right antennas between satellites
         for antenna in antennas:
+            print(list(antennas.keys())[-1] == antenna)
             if antennas[antenna] < average_distance:
-                continue
+                if list(antennas.keys())[-1] == antenna:
+                    print("hello")
+                    result += f"⚠️ <font color=\"orange\">WARNING: SATELLITES WON'T BE ABLE TO COMMUNICATE,<br>Add more satellites</font>"
+                    break
+                else:
+                    continue
             else:
                 antenna_rating = self.reduce_number(antennas[antenna])
                 result += f"Estimated required antenna: {antenna} ({antenna_rating})"
