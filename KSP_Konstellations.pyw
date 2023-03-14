@@ -366,6 +366,7 @@ class Ui_MainWindow(object):
         main_orbit_alt = self.finalorbit_select.value() * 1000
         amount = self.amount_select.value()
         radius = system[celestial_body]["radius"]
+        print(radius)
 
         G = 6.6743e-11
         result = f""
@@ -403,6 +404,13 @@ class Ui_MainWindow(object):
                         result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S BODY</font><br>"
                     else:
                         result += f"⚠️ <font color=\"orange\">WARNING: ORBITS ARE CROSSING {body.upper()}'S SOI</font><br>"
+        
+        # Coms
+        average_distance = 2 * (final_orbit + radius) * math.sin(math.pi / amount)
+        min_alt_comNet = math.sqrt((final_orbit + radius) ** 2 - ((final_orbit + radius) * math.sin(math.pi / amount)) ** 2)
+        if min_alt_comNet < radius:
+            print("fuck")
+            result += f"⚠️ <font color=\"orange\">WARNING: SATELLITES COMMUNICATIONS MAY BE BLOCKED BY {celestial_body.upper()}'S BODY</font><br>"
 
         result += f"Final orbit: {round(final_orbit / 1000):,}km<br>"
 
