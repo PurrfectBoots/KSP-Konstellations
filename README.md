@@ -2,6 +2,8 @@
 
 KSP Konstellations is a small and fast app that you can use to easily calculate data for your next constellation of satellites anywhere in the Kerbol system.
 
+#### https://forum.kerbalspaceprogram.com/index.php?/topic/215089-ksp-konstellations/
+
 ## Usage
 If you need to make a constellation of satellites cause you lost twice connection with you're probe on Eeloo or you just want to challenge your friend Elon you need to know how to proceed.<br>
 You need 2 orbits, the final orbit (red) where all the satellites will circularize one by one, and the transfer orbit (blue) where the main stage is gonna drop a satellite every period (or more).
