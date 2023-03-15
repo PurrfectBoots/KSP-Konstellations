@@ -9,7 +9,7 @@ You need 2 orbits, the final orbit (red) where all the satellites will circulari
 ![image](https://user-images.githubusercontent.com/79790839/225386603-98a2ff86-2414-4592-895a-48718a19c13f.png)
 
 All the required things you need to know are the number of satellites, the final orbit, and the celestial body orbited.<br>
-KSP Konstellations will provide you the following peices of information:
+KSP Konstellations will provide you the following pieces of information:
 - Transfer orbit periapsis
 - Both orbits periods
 - Drops frequency, meaning how many periods you need to wait before dropping the next satellite (usually 1)
