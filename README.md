@@ -24,7 +24,7 @@ Then you'll just have to head to the body, set you're main vessel to the transfe
 
 ## Installation
 
-- Head to the latest release here https://github.com/PurrfectsBoots/KSP-Konstellations/releases/tag/Latest and download the `KSP_Konstellations.zip` file
+- Head to the latest release here https://github.com/PurrfectsBoots/KSP-Konstellations/releases/latest and download the `KSP_Konstellations.zip` file
 - Unzip the file
 - Open the `KSP_Konstellations.exe` inside and you're ready to go
 
