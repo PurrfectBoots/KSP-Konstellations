@@ -1,5 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtWidgets, QtGui
 import math
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
 
 system = {
     "kerbol": {
@@ -183,11 +186,11 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
+        font.setBold(True)
         font.setItalic(True)
-        font.setWeight(75)
         self.parameters.setFont(font)
-        self.parameters.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.parameters.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.parameters.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.parameters.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.parameters.setObjectName("parameters")
         self.body_select = QtWidgets.QComboBox(self.parameters)
         self.body_select.setGeometry(QtCore.QRect(70, 30, 240, 25))
@@ -215,9 +218,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
+        font.setBold(True)
         font.setItalic(True)
         font.setUnderline(False)
-        font.setWeight(75)
         self.body_title.setFont(font)
         self.body_title.setObjectName("body_title")
         self.finalorbit_title = QtWidgets.QLabel(self.parameters)
@@ -250,11 +253,11 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(26)
+        font.setBold(True)
         font.setItalic(True)
         font.setUnderline(False)
-        font.setWeight(75)
         self.title.setFont(font)
-        self.title.setAlignment(QtCore.Qt.AlignCenter)
+        self.title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.title.setObjectName("title")
         self.execute_button = QtWidgets.QPushButton(self.centralwidget)
         self.execute_button.setGeometry(QtCore.QRect(125, 280, 150, 50))
@@ -262,8 +265,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
+        font.setBold(True)
         font.setItalic(True)
-        font.setWeight(75)
         self.execute_button.setFont(font)
         self.execute_button.setObjectName("execute_button")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -350,17 +353,17 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(18)
+        font.setBold(True)
         font.setItalic(True)
-        font.setWeight(75)
         self.errMsg.setFont(font)
         self.errMsg.setStyleSheet('color: red')
         self.errMsg.adjustSize()
 
         # Remove question mark
-        self.errDialog.setWindowFlags(self.errDialog.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
+        self.errDialog.setWindowFlags(self.errDialog.windowFlags() & ~QtCore.Qt.WindowType.WindowContextHelpButtonHint)
             
         # Add spacing
-        self.resultsLayout.addWidget(self.errMsg, alignment=QtCore.Qt.AlignCenter)
+        self.resultsLayout.addWidget(self.errMsg, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsLayout.setContentsMargins(15, 15, 15, 15)
         self.errDialog.adjustSize()
         self.errDialog.setFixedSize(self.errMsg.size() + QtCore.QSize(30, 30))
@@ -368,7 +371,7 @@ class Ui_MainWindow(object):
         self.errDialog.setWindowIcon(QtGui.QIcon("icon.ico"))
 
         self.errDialog.setModal(True)
-        self.errDialog.exec_()
+        self.errDialog.exec()
     
     def doTheMaths(self):
         celestial_body = self.body_select.currentText().lower()
@@ -401,7 +404,7 @@ class Ui_MainWindow(object):
             if times == periodLimit: return self.err("Too many satellites or orbit is too low (Period limit exceeded)")
 
         # Total dropping time
-        missionTime = transfer_period * times * (amount - 1)
+        missionTime = transfer_period * times
         
         if times == 1: times = "" 
         else: times = str(times) + " "
@@ -460,16 +463,16 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(18)
+        font.setBold(True)
         font.setItalic(True)
-        font.setWeight(75)
         self.results.setFont(font)
         self.results.adjustSize()
 
         # Remove question mark
-        self.resultsDialog.setWindowFlags(self.resultsDialog.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
+        self.resultsDialog.setWindowFlags(self.resultsDialog.windowFlags() & ~QtCore.Qt.WindowType.WindowContextHelpButtonHint)
             
         # Add spacing
-        self.resultsLayout.addWidget(self.results, alignment=QtCore.Qt.AlignCenter)
+        self.resultsLayout.addWidget(self.results, alignment=QtCore.Qt.AlignmentFlag.AlignCenter)
         self.resultsLayout.setContentsMargins(15, 15, 15, 15)
         self.resultsDialog.adjustSize()
         self.resultsDialog.setFixedSize(self.results.size() + QtCore.QSize(30, 30))
@@ -477,7 +480,7 @@ class Ui_MainWindow(object):
         self.resultsDialog.setWindowIcon(QtGui.QIcon("icon.ico"))
 
         self.resultsDialog.setModal(True)
-        self.resultsDialog.exec_()
+        self.resultsDialog.exec()
 
 
 if __name__ == "__main__":
@@ -487,4 +490,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
