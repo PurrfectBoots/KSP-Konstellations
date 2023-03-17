@@ -399,6 +399,9 @@ class Ui_MainWindow(object):
             number = "s"
             periodLimit = self.periodLimit_select.value()
             if times == periodLimit: return self.err("Too many satellites or orbit is too low (Period limit exceeded)")
+
+        # Total dropping time
+        missionTime = transfer_period * times * (amount - 1)
         
         if times == 1: times = "" 
         else: times = str(times) + " "
@@ -431,6 +434,9 @@ class Ui_MainWindow(object):
         result += f"Transfer orbit periapsis: {int(transfer_orbit_periapsis / 1000):,}km<br>"
 
         result += f"Stage every {str(times)}period{number}<br>"
+
+        days, hours, minutes, seconds = self.convert_seconds_to_DHMS(missionTime)
+        result += f"Total dropping time: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(missionTime):,} seconds)<br>"
 
         # Estimate the right antennas between satellites
         for antenna in antennas:
