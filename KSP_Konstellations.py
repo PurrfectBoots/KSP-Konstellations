@@ -379,15 +379,20 @@ class Ui_MainWindow(object):
         main_orbit_alt = self.finalorbit_select.value() * 1000
         amount = self.amount_select.value()
         radius = system[celestial_body]["radius"]
+        mass = system[celestial_body]["mass"]
 
         G = 6.6743e-11
         result = f""
 
-        final_period = 2 * math.pi * math.sqrt(((main_orbit_alt + radius) ** 3) / (G * system[celestial_body]["mass"]))
+        final_period = 2 * math.pi * math.sqrt(((main_orbit_alt + radius) ** 3) / (G * mass))
         transfer_period = final_period * (1 - (1/amount))
-        final_orbit = (G * system[celestial_body]["mass"] * (final_period ** 2) / (4 * math.pi ** 2)) ** (1/3) - radius
-        semiMajorAxis = ((G * system[celestial_body]["mass"] * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
+        final_orbit = (G * mass * (final_period ** 2) / (4 * math.pi ** 2)) ** (1/3) - radius
+        semiMajorAxis = ((G * mass * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
         transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - radius) - radius
+        eccentricity = (final_orbit - transfer_orbit_periapsis) / (final_orbit + transfer_orbit_periapsis + 2 * radius)
+        finalOrbitVelocity = math.sqrt((mass * G) / (final_orbit + radius))
+        transferOrbitApogeeVelocity = math.sqrt(( G * mass * (1 - eccentricity) ) / (semiMajorAxis * (1 + eccentricity)))
+        transferDeltaV = finalOrbitVelocity - transferOrbitApogeeVelocity
             
         # Checks
 
@@ -396,15 +401,19 @@ class Ui_MainWindow(object):
         times = 1
         while transfer_orbit_periapsis + radius < radius + system[celestial_body]["atmosphere"]:
             transfer_period = final_period * (1 - (1 / (amount * times)))
-            semiMajorAxis = ((G * system[celestial_body]["mass"] * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
+            semiMajorAxis = ((G * mass * (transfer_period / (2 * math.pi)) ** 2) ** (1/3))
             transfer_orbit_periapsis = (2 * semiMajorAxis - final_orbit - radius) - radius
+            eccentricity = (final_orbit - transfer_orbit_periapsis) / (final_orbit + transfer_orbit_periapsis + 2 * radius)
+            finalOrbitVelocity = math.sqrt((mass * G) / main_orbit_alt + radius)
+            transferOrbitApogeeVelocity = math.sqrt(( G * mass * (1 + eccentricity) ) / (semiMajorAxis * (1 - eccentricity)))
+            transferDeltaV = finalOrbitVelocity - transferOrbitApogeeVelocity
             times += 1
             number = "s"
             periodLimit = self.periodLimit_select.value()
             if times == periodLimit: return self.err("Too many satellites or orbit is too low (Period limit exceeded)")
 
         # Total dropping time
-        missionTime = transfer_period * times
+        missionTime = transfer_period * times * (amount - 1)
         
         if times == 1: times = "" 
         else: times = str(times) + " "
@@ -440,6 +449,8 @@ class Ui_MainWindow(object):
 
         days, hours, minutes, seconds = self.convert_seconds_to_DHMS(missionTime)
         result += f"Total dropping time: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(missionTime):,} seconds)<br>"
+
+        result += f"Estimated total ΔV needed: {int(abs(transferDeltaV)):,} ms/s/stage<br>"
 
         # Estimate the right antennas between satellites
         for antenna in antennas:
