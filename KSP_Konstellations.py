@@ -450,7 +450,7 @@ class Ui_MainWindow(object):
         days, hours, minutes, seconds = self.convert_seconds_to_DHMS(missionTime)
         result += f"Total dropping time: {days}d, {hours}h, {minutes}m, {(seconds)}s ({int(missionTime):,} seconds)<br>"
 
-        result += f"Estimated total ΔV needed: {int(abs(transferDeltaV)):,} ms/s/stage<br>"
+        result += f"Estimated total ΔV needed: {int(abs(transferDeltaV)):,} m/s/stage<br>"
 
         # Estimate the right antennas between satellites
         for antenna in antennas:
